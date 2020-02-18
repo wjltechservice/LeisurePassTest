@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+
+project.ext {
+    cucumberVersion = "5.3.0"
+    springVersion = '2.2.4.RELEASE'
+    junitVersion = '5.0.0'
+    restAssuredVersion = '4.2.0'
+}
+
+group 'com.com.wjltechservices'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
+    testCompile group: 'io.cucumber', name: 'cucumber-junit', version: cucumberVersion
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
+    testCompile group: 'io.cucumber', name: 'cucumber-java', version: cucumberVersion
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-spring
+    compile group: 'io.cucumber', name: 'cucumber-spring', version: cucumberVersion
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: springVersion
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-autoconfigure
+    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: springVersion
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: restAssuredVersion
+}
