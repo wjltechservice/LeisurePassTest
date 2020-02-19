@@ -35,10 +35,8 @@ public class PassUtility {
     public String renewPass(String passId, String customerId) {
         // Call endpoint for creating a pass
         Response response = given()
-                .param("passID", passId)
-                .param("customerId", customerId)
                 .when()
-                .request("POST", "/pass/renew");
+                .request("POST", String.format("/pass/%s/%s/renew", passId, customerId));
 
         // Verify 200 response
         response.then().statusCode(200);
@@ -50,10 +48,8 @@ public class PassUtility {
     public boolean validatePass(String vendorId, String passId) {
         // Call endpoint for creating a pass
         Response response = given()
-                .param("vendorId", vendorId)
-                .param("passId", passId)
                 .when()
-                .request("POST", "/pass/validate");
+                .request("POST", String.format("/pass/%s/%s/validate", passId, vendorId));
 
         // Verify 200 response
         response.then().statusCode(200);
@@ -64,5 +60,14 @@ public class PassUtility {
         Map<String, Object> responseMap = (Map<String, Object>) new Gson().fromJson(responseJson, Map.class);
 
         return (boolean) responseMap.get("isVaid");
+    }
+
+    public void cancelPass(String passId, String customerId) {
+        Response response = given()
+                .when()
+                .request("POST", String.format("/pass/%s/%s/cancel", passId, customerId));
+
+        // Verify 200 response
+        response.then().statusCode(200);
     }
 }

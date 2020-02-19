@@ -109,4 +109,12 @@ public class PassStepDefinitions {
     private long todayAtMidnight() {
         return ZonedDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT, ZoneId.of("UTC")).toEpochSecond();
     }
+
+    @Then("^they are able to cancel the pass$")
+    public void theyAreAbleToCancelThePass() {
+        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        String passId = (String) scenarioContext.getContext(Context.PASS_ID);
+
+        passUtility.cancelPass(passId, customerId);
+    }
 }

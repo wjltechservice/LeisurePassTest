@@ -30,17 +30,22 @@ Feature: Passes
       | 7        |
       | 30       |
 
+  Scenario: Validating a pass
+  A vendor should be able to check whether a pass is currently valid for their attraction
 
-    Scenario: Validating a pass
-      A vendor should be able to check whether a pass is currently valid for their attraction
+    Given the customer has a valid 1 day pass for Thorpe Park in London
+    When Thorpe Park validate the pass for the London attraction
+    Then they are told the pass is valid
 
-      Given the customer has a valid 1 day pass for Thorpe Park in London
-      When Thorpe Park validate the pass for the London attraction
-      Then they are told the pass is valid
+  Scenario: Validating a pass
+  A vendor should be able to check whether a pass is currently valid for their attraction
 
-    Scenario: Validating a pass
-      A vendor should be able to check whether a pass is currently valid for their attraction
+    Given the customer has an expired 1 day pass for Thorpe Park in London
+    When Thorpe Park validate the pass for the London attraction
+    Then they are told the pass is invalid
 
-      Given the customer has an expired 1 day pass for Thorpe Park in London
-      When Thorpe Park validate the pass for the London attraction
-      Then they are told the pass is invalid
+  Scenario: Cancelling a pass
+  A customer should be able to cancel a pass that they have bought
+
+    Given the customer has a valid 1 day pass for Thorpe Park in London
+    Then they are able to cancel the pass
