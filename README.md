@@ -11,4 +11,4 @@ Start the LeisurePass application (LeisurePass README for instructions)
 Ensure `application.root` and `application.port` in `src/test/resoureces/cucumber.properties` are set to point to where
  the LeisurePass app is running
 
-Then run `gradelw test` to kick off the tests
+Then run `gradel test` to kick off the tests
