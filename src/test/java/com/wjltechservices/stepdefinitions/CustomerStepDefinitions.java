@@ -29,20 +29,21 @@ public class CustomerStepDefinitions {
 
     @When("^I add a new customer (.*) from (.*)$")
     public void iAddANewCustomerFullNameFromHomeCity(String fullName, String homeCity) {
-        String customerId = customerUtility.addCustomer(fullName, homeCity);
+        Long customerId = customerUtility.addCustomer(fullName, homeCity);
         scenarioContext.putContext(Context.CUSTOMER_ID, customerId);
     }
 
-    @Then("^I am returned a Customer ID$")
+    @Then("^I am returned a numeric Customer ID$")
     public void iAmReturnedANumericCustomerID() {
         Object customerId = scenarioContext.getContext(Context.CUSTOMER_ID);
 
         assertThat(customerId, is(notNullValue()));
+        assertThat(customerId, is(instanceOf(Number.class)));
     }
 
     @Given("^I have a customer in the system (.*) from (.*)$")
     public void iHaveACustomerInTheSystemFullNameFromHomeCity(String fullName, String homeCity) {
-        String customerId = customerUtility.addCustomer(fullName, homeCity);
+        Long customerId = customerUtility.addCustomer(fullName, homeCity);
         scenarioContext.putContext(Context.CUSTOMER_ID, customerId);
     }
 
@@ -53,7 +54,7 @@ public class CustomerStepDefinitions {
 
     @When("^I query for the customer using their Customer ID$")
     public void iQueryForTheCustomerUsingTheirCustomerID() {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
 
         String customerDetails = customerUtility.getCustomer(customerId);
         scenarioContext.putContext(Context.CUSTOMER_DETAILS, customerDetails);
@@ -62,6 +63,8 @@ public class CustomerStepDefinitions {
     @SuppressWarnings("unchecked")
     @Then("^I am provided with the Customer Details (.*)$")
     public void iAmProvidedWithTheCustomerDetailsCustomerDetails(String customerDetails) {
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
+        customerDetails = customerDetails.replaceAll("<GENERATED>", String.valueOf(customerId));
         Map<String, Object> expected = (Map<String, Object>) new Gson().fromJson(customerDetails, Map.class);
 
         String result = (String) scenarioContext.getContext(Context.CUSTOMER_DETAILS);

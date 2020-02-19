@@ -10,10 +10,10 @@ import static io.restassured.RestAssured.given;
 
 @Component
 public class CustomerUtility {
-    public String addCustomer(String fullName, String homeCity) {
+    public Long addCustomer(String fullName, String homeCity) {
         // Call endpoint for creating customer
         Response response = given()
-                .param("fullName", fullName)
+                .param("customerName", fullName)
                 .param("homeCity", homeCity)
                 .when()
                 .request("POST", "/customer/new");
@@ -26,10 +26,10 @@ public class CustomerUtility {
         @SuppressWarnings("unchecked")
         Map<String, Object> responseMap = (Map<String, Object>) new Gson().fromJson(responseJson, Map.class);
 
-        return (String) responseMap.get("customerId");
+        return ((Number) responseMap.get("customerId")).longValue();
     }
 
-    public String getCustomer(String customerId) {
+    public String getCustomer(Long customerId) {
         Response response = given().when().request("GET", "/customer/" + customerId);
         response.then().statusCode(200);
         return response.getBody().asString();

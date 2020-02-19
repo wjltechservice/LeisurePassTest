@@ -5,7 +5,7 @@ Feature: Customers
   I should be able to add multiple customers to the system and store the required data
 
     When I add a new customer <Full Name> from <Home City>
-    Then I am returned a Customer ID
+    Then I am returned a numeric Customer ID
 
     Examples:
       | Full Name  | Home City |
@@ -33,5 +33,5 @@ Feature: Customers
 
     Examples:
       | Full Name  | Home City | Customer Details                                                         |
-      | Joe Bloggs | London    | { 'customerId': 1, 'customerName': 'Joe Bloggs', 'homeCity': 'London' }  |
-      | Jim Anyone | Cardiff   | { 'customerId': 2, 'customerName': 'Jim Anyone', 'homeCity': 'Cardiff' } |
+      | Joe Bloggs | London    | { 'customerId': <GENERATED>, 'customerName': 'Joe Bloggs', 'homeCity': 'London' }  |
+      | Jim Anyone | Cardiff   | { 'customerId': <GENERATED>, 'customerName': 'Jim Anyone', 'homeCity': 'Cardiff' } |
