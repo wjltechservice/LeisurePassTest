@@ -43,3 +43,7 @@ dependencies {
     // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: restAssuredVersion
 }
+
+test {
+
+}

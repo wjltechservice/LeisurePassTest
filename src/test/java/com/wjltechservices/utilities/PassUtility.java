@@ -10,14 +10,14 @@ import static io.restassured.RestAssured.given;
 
 @Component
 public class PassUtility {
-    public String addPass(String vendorId, String customerId, String passCity, int duration, long validFrom) {
+    public String addPass(String vendorId, Long customerId, String passCity, int duration, long validFrom) {
         // Call endpoint for creating a pass
         Response response = given()
                 .param("vendorId", vendorId)
                 .param("customerId", customerId)
                 .param("passCity", passCity)
                 .param("validFrom", validFrom)
-                .param("duration", duration)
+                .param("durationDays", duration)
                 .when()
                 .request("POST", "/pass/new");
 
@@ -32,11 +32,11 @@ public class PassUtility {
         return (String) responseMap.get("passId");
     }
 
-    public String renewPass(String passId, String customerId) {
+    public String renewPass(String passId, Long customerId) {
         // Call endpoint for creating a pass
         Response response = given()
                 .when()
-                .request("POST", String.format("/pass/%s/%s/renew", passId, customerId));
+                .request("PATCH", String.format("/pass/%s/%s/renew", passId, customerId));
 
         // Verify 200 response
         response.then().statusCode(200);
@@ -49,7 +49,7 @@ public class PassUtility {
         // Call endpoint for creating a pass
         Response response = given()
                 .when()
-                .request("POST", String.format("/pass/%s/%s/validate", passId, vendorId));
+                .request("GET", String.format("/pass/%s/%s/validate", passId, vendorId));
 
         // Verify 200 response
         response.then().statusCode(200);
@@ -59,13 +59,13 @@ public class PassUtility {
         @SuppressWarnings("unchecked")
         Map<String, Object> responseMap = (Map<String, Object>) new Gson().fromJson(responseJson, Map.class);
 
-        return (boolean) responseMap.get("isVaid");
+        return (boolean) responseMap.get("valid");
     }
 
-    public void cancelPass(String passId, String customerId) {
+    public void cancelPass(String passId, Long customerId) {
         Response response = given()
                 .when()
-                .request("POST", String.format("/pass/%s/%s/cancel", passId, customerId));
+                .request("DELETE", String.format("/pass/%s/%s/cancel", passId, customerId));
 
         // Verify 200 response
         response.then().statusCode(200);

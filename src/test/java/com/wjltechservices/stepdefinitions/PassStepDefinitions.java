@@ -32,7 +32,7 @@ public class PassStepDefinitions {
 
     @When("^the customer purchases a new (\\d+) day pass for Thorpe Park in (.*)$")
     public void theCustomerPurchasesANewDurationDayPassForThorpeParkInCity(int duration, String passCity) {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
         long validFrom = todayAtMidnight();
         String passId = passUtility.addPass("thorpepark", customerId, passCity, duration, validFrom);
 
@@ -46,12 +46,12 @@ public class PassStepDefinitions {
         assertThat(passId, is(notNullValue()));
         // Pattern for passId should be complex enough to make collision effectively impossible.
         // pattern is creationEpochMillis-customerId-vendorId-JavaUUID
-        assertThat(passId, matchesPattern("\\d+-\\d+-thorpepark-([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})"));
+        assertThat(passId, matchesPattern("([0-9]){13}-thorpepark-\\d+-([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})"));
     }
 
     @Given("^the customer has an expired (\\d+) day pass for Thorpe Park$")
     public void theCustomerHasAnExpiredDurationDayPassForThorpePark(int duration) {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
         long validFrom = todayAtMidnight() - TWO_DAYS_IN_SECONDS;
         String passId = passUtility.addPass("thorpepark", customerId, "London", duration, validFrom);
 
@@ -60,7 +60,7 @@ public class PassStepDefinitions {
 
     @When("^the customer renews their pass$")
     public void theCustomerRenewsTheirPass() {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
         String passId = (String) scenarioContext.getContext(Context.PASS_ID);
 
         String passDetails = passUtility.renewPass(passId, customerId);
@@ -74,16 +74,16 @@ public class PassStepDefinitions {
         @SuppressWarnings("unchecked")
         Map<String, Object> passMap = (Map<String, Object>) new Gson().fromJson(passDetails, Map.class);
 
-        long validFrom = (long) passMap.get("validFrom");
+        long validFrom = ((Number) passMap.get("validFrom")).longValue();
         assertThat(validFrom, is(todayAtMidnight()));
 
-        int durationResult = (int) passMap.get("duration");
+        int durationResult = ((Number) passMap.get("durationDays")).intValue();
         assertThat(durationResult, is(duration));
     }
 
     @Given("^the customer has an? (\\w+) (\\d+) day pass for Thorpe Park in London$")
     public void theCustomerHasAValidDayPassForThorpeParkInLondon(String validExpired, int duration) {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
         long validFrom = "valid".equals(validExpired) ? todayAtMidnight() : todayAtMidnight() - duration * TWO_DAYS_IN_SECONDS;
         String passId = passUtility.addPass("thorpepark", customerId, "London", duration, validFrom);
 
@@ -106,15 +106,15 @@ public class PassStepDefinitions {
         assertThat(result, is(validity));
     }
 
-    private long todayAtMidnight() {
-        return ZonedDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT, ZoneId.of("UTC")).toEpochSecond();
-    }
-
     @Then("^they are able to cancel the pass$")
     public void theyAreAbleToCancelThePass() {
-        String customerId = (String) scenarioContext.getContext(Context.CUSTOMER_ID);
+        Long customerId = (Long) scenarioContext.getContext(Context.CUSTOMER_ID);
         String passId = (String) scenarioContext.getContext(Context.PASS_ID);
 
         passUtility.cancelPass(passId, customerId);
+    }
+
+    private long todayAtMidnight() {
+        return ZonedDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT, ZoneId.of("UTC")).toEpochSecond();
     }
 }
