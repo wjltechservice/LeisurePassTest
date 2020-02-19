@@ -56,11 +56,11 @@ public class VendorStepDefinitions {
     @SuppressWarnings("unchecked")
     @Then("^I am provided with the details (.*)$")
     public void iAmProvidedWithTheVendorDetails(String details) {
-        Map<String, Object> expected = new Gson().fromJson(details, Map.class);
+        Map<String, Object> expected = (Map<String, Object>) new Gson().fromJson(details, Map.class);
 
         String result = (String) scenarioContext.getContext(Context.VENDOR_DETAILS);
 
-        Map<String, Object> resultMap = new Gson().fromJson(result, Map.class);
+        Map<String, Object> resultMap = (Map<String, Object>) new Gson().fromJson(result, Map.class);
         assertThat(resultMap, is(expected));
     }
 }

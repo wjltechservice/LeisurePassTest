@@ -5,5 +5,7 @@ package com.wjltechservices.context;
  */
 public enum Context {
     VENDOR_ID,
-    VENDOR_DETAILS
+    VENDOR_DETAILS,
+    CUSTOMER_DETAILS,
+    PASS_ID, PASS_DETAILS, PASS_IS_VALID, CUSTOMER_ID
 }
